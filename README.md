@@ -33,6 +33,13 @@ ng generate interface common/interfaces/interface;
 
 ng generate environments;
 
+ng build --configuration production
+
+ng serve
+ng serve --configuration production
+
+Get-History
+
 
 
 # AngularSample18
