@@ -1,15 +1,57 @@
 import { Component } from '@angular/core';
 import { environment } from '../../../../environments/environment';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CustomValidator } from '../../../common/validators/numeric.validator';
+import { HttpService } from '../../../common/services/http.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-page1',
-  imports: [],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './page1.component.html',
-  styleUrl: './page1.component.scss'
+  styleUrl: './page1.component.scss',
+  standalone: true,
 })
 export class Page1Component {
-  private apiUrl = environment.apiUrl;
-  constructor() {
-    console.log(this.apiUrl);
+  form: FormGroup;
+  requiredError = false;
+  numericError = false;
+  responseError = false;
+
+  constructor(private fb: FormBuilder, private httpService: HttpService) {
+    this.form = this.fb.group({
+      inputOneTime: ['', [Validators.required, CustomValidator.numeric()]]
+    });
+  }
+
+  /**
+   * フォームの送信処理
+   */
+  onSubmit() {
+    // 初期化
+    this.responseError = false;
+
+    // 入力値チェック
+    this.validateForm();
+
+    // APIコール
+    if (this.form.valid) {
+      this.httpService.post('your-endpoint', this.form.value).subscribe(response => {
+        console.log('API call successful', response);
+      }, error => {
+        this.responseError = true;
+        console.error('API call failed', error);
+      });
+    } else {
+      console.log('Form is invalid');
+    }
+  }
+
+  /**
+   * フォームのバリデーション処理
+   */
+  validateForm() {
+    this.requiredError = this.form.get('inputOneTime')?.errors?.['required'] || false;
+    this.numericError = this.form.get('inputOneTime')?.errors?.['numeric'] || false;
   }
 }
