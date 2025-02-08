@@ -15,23 +15,23 @@ npm install -g @angular/cli@18.2.14
 
 ng new angular_sample_18
 
-ng generate component views/pages/page1
-ng generate component views/pages/page2
-ng generate component views/layout/layout
-ng generate component views/common/header/header
-ng generate component views/common/footer/footer
+ng generate component views/pages/page1;
+ng generate component views/pages/page2;
+ng generate component views/layout/layout;
+ng generate component views/common/header/header;
+ng generate component views/common/footer/footer;
 
-ng generate service common/services/http
+ng generate service common/services/http;
 
-ng generate enum common/defines/enum/enum
-ng generate enum common/defines/messages/message1
-ng generate enum common/defines/images/image1
+ng generate enum common/defines/enum/enum;
+ng generate enum common/defines/messages/message1;
+ng generate enum common/defines/images/image1;
 
-ng generate guard common/guard/auth
+ng generate guard common/guard/auth;
 
-ng generate interface common/interfaces/interface
+ng generate interface common/interfaces/interface;
 
-ng generate environments
+ng generate environments;
 
 
 
