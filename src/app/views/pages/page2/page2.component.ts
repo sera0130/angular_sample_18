@@ -54,11 +54,14 @@ export class page2Component implements OnInit {
       
         // 認証トークンをセット
         const token = 'your-auth-token';
-        this.authService.setToken(token);
-        console.log('Token set:', this.authService.getToken());
+        this.authService.setAuthToken(token);
+        console.log('Token set:', this.authService.getAuthToken());
       }, error => {
         this.submitResponseError = true;
         console.error('API call failed', error);
+        const token = 'your-auth-token';
+        this.authService.setAuthToken(token);
+        console.log('Token set:', this.authService.getAuthToken());
       });
     } else {
       console.log('Form is invalid');

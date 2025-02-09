@@ -1,0 +1,16 @@
+<div>
+    <h3>page3 activated</h3>
+    <p *ngIf="onInitResponseError">oninit response error.</p>
+</div>
+<form [formGroup]="form">
+    <div>
+        <label for="inputOneTime">Input A:</label>
+        <input id="inputOneTime" formControlName="inputOneTime" />
+        <div>
+            <p *ngIf="requiredError">This field is required.</p>
+            <p *ngIf="numericError">Only numeric values are allowed.</p>
+            <p *ngIf="submitResponseError">auth response error.</p>
+        </div>
+    </div>
+    <button type="button" (click)="onSubmit()">Submit</button>
+</form>

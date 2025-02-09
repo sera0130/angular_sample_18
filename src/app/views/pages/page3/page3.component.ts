@@ -6,23 +6,22 @@ import { HttpService } from '../../../common/services/http.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../common/services/auth.service';
 import { OneTimeAuthResponse } from '../../../common/interfaces/interface';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-page1',
+  selector: 'app-page3',
   imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './page1.component.html',
-  styleUrl: './page1.component.scss',
+  templateUrl: './page3.component.html',
+  styleUrl: './page3.component.scss',
   standalone: true,
 })
-export class Page1Component implements OnInit {
+export class page3Component implements OnInit {
   form: FormGroup;
   requiredError = false;
   numericError = false;
   onInitResponseError = false;
   submitResponseError = false;
 
-  constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService,private router: Router) {
+  constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService) {
     this.form = this.fb.group({
       inputOneTime: ['', [Validators.required, CustomValidator.numeric()]]
     });
@@ -57,9 +56,6 @@ export class Page1Component implements OnInit {
         const token = 'your-auth-token';
         this.authService.setAuthToken(token);
         console.log('Token set:', this.authService.getAuthToken());
-
-        // ページ遷移
-        this.router.navigate(['/page/page3']);
       }, error => {
         this.submitResponseError = true;
         console.error('API call failed', error);

@@ -1,5 +1,7 @@
 # command
 Set-ExecutionPolicy RemoteSigned -Scope Process
+# Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+# Set-ExecutionPolicy Restricted -Scope CurrentUser
 
 npm install -g @angular/cli
 ng new angular_sample
