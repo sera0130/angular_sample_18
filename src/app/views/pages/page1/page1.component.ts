@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CustomValidator } from '../../../common/validators/custom.validator';
 import { HttpService } from '../../../common/services/http.service';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../common/services/auth.service';
+import { AuthResponse } from '../../../common/interfaces/interface';
 
 @Component({
   selector: 'app-page1',
@@ -19,7 +21,7 @@ export class Page1Component implements OnInit {
   onInitResponseError = false;
   submitResponseError = false;
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) {
+  constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService) {
     this.form = this.fb.group({
       inputOneTime: ['', [Validators.required, CustomValidator.numeric()]]
     });
@@ -36,7 +38,7 @@ export class Page1Component implements OnInit {
   }
 
   /**
-   * フォームの送信処理
+   * フォームの送信処理（認証）
    */
   onSubmit(): void {
     // 初期化
@@ -45,10 +47,15 @@ export class Page1Component implements OnInit {
     // 入力値チェック
     this.validateForm();
 
-    // APIコール
+    // 認証APIコール
     if (this.form.valid) {
-      this.httpService.post('your-endpoint', this.form.value).subscribe(response => {
+      this.httpService.post<AuthResponse>('your-endpoint', this.form.value).subscribe(response => {
         console.log('API call successful', response);
+      
+        // 認証トークンをセット
+        const token = 'your-auth-token';
+        this.authService.setToken(token);
+        console.log('Token set:', this.authService.getToken());
       }, error => {
         this.submitResponseError = true;
         console.error('API call failed', error);
@@ -64,5 +71,12 @@ export class Page1Component implements OnInit {
   validateForm(): void {
     this.requiredError = this.form.get('inputOneTime')?.errors?.['required'] || false;
     this.numericError = this.form.get('inputOneTime')?.errors?.['numeric'] || false;
+  }
+
+  /**
+   * フォームのバリデーション結果取得
+   */
+  get isFormValid(): boolean {
+    return this.form.valid;
   }
 }

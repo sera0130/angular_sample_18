@@ -22,6 +22,7 @@ ng generate component views/common/header/header;
 ng generate component views/common/footer/footer;
 
 ng generate service common/services/http;
+ng generate service common/services/auth;
 
 ng generate enum common/defines/enum/enum;
 ng generate enum common/defines/messages/message1;

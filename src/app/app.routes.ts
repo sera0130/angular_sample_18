@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './views/layout/layout/layout.component';
 import { Page1Component } from './views/pages/page1/page1.component';
-import { Page2Component } from './views/pages/page2/page2.component';
+import { page2Component } from './views/pages/page2/page2.component';
 
 export const routes: Routes = [
     {
@@ -9,7 +9,7 @@ export const routes: Routes = [
       component: LayoutComponent,
       children: [
         { path: 'page1', component: Page1Component },
-        { path: 'page2', component: Page2Component },
+        { path: 'page2', component: page2Component },
       ],
     },
     {

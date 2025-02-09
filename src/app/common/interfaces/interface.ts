@@ -1,2 +1,4 @@
-export interface Interface {
+export interface AuthResponse {
+  token: string;
+  expiresIn: number;
 }
