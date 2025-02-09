@@ -23,8 +23,19 @@ export class page3Component implements OnInit {
 
   ngOnInit(): void {
     const apiResponse: Item[] = [
-      { title: '見出し1', subItems: [{ subTitle: '小見出し1-1' }, { subTitle: '小見出し1-2' }] },
-      { title: '見出し2', subItems: [{ subTitle: '小見出し2-1' }, { subTitle: '小見出し2-2' }, { subTitle: '小見出し2-3' }] }
+      {
+        title: '見出し1', subItems: [
+          { subTitle: '小見出し1-1', unitPrice: 1000, quantity: 2 },
+          { subTitle: '小見出し1-2', unitPrice: 1500, quantity: 3 }
+        ]
+      },
+      {
+        title: '見出し2', subItems: [
+          { subTitle: '小見出し2-1', unitPrice: 2000, quantity: 2 },
+          { subTitle: '小見出し2-2', unitPrice: 1000, quantity: 1 },
+          { subTitle: '小見出し2-3', unitPrice: 1000, quantity: 5 }
+        ]
+      }
     ];
     this.populateForm(apiResponse);
     // this.fetchData().subscribe(data => this.populateForm(data));
@@ -48,7 +59,12 @@ export class page3Component implements OnInit {
 
   populateForm(apiResponse: Item[]) {
     apiResponse.forEach(item => {
-      const subItemsArray = this.fb.array(item.subItems.map(subItem => this.fb.control(subItem.subTitle)));
+      const subItemsArray = this.fb.array(item.subItems.map(subItem => this.fb.group({
+        subTitle: subItem.subTitle,
+        unitPrice: subItem.unitPrice,
+        quantity: [0], // 初期値として数量を0に設定
+        totalAmount: [{ value: 0, disabled: true }] // 初期値として金額を0に設定し、入力を無効化
+      })));
       const itemGroup = this.fb.group({
         title: item.title,
         subItems: subItemsArray
@@ -56,13 +72,32 @@ export class page3Component implements OnInit {
       this.items.push(itemGroup);
     });
   }
+
+  calculateTotalAmount(subItemGroup: AbstractControl) {
+    const quantity = subItemGroup.get('quantity')?.value || 0;
+    const unitPrice = subItemGroup.get('unitPrice')?.value || 0;
+    const totalAmount = quantity * unitPrice;
+    subItemGroup.get('totalAmount')?.setValue(totalAmount);
+    return totalAmount;
+  }
+
+  calculateGrandTotal() {
+    return this.items.controls.reduce((total, itemGroup) => {
+      const subItems = this.getSubItems(itemGroup);
+      return total + subItems.controls.reduce((subTotal, subItemGroup) => {
+        return subTotal + this.calculateTotalAmount(subItemGroup);
+      }, 0);
+    }, 0);
+  }
 }
 
-interface SubItem {
+export interface SubItem {
   subTitle: string;
+  unitPrice: number;
+  quantity?: number; // Optional to track quantity for calculation
 }
 
-interface Item {
+export interface Item {
   title: string;
   subItems: SubItem[];
 }

@@ -2,11 +2,21 @@
   <div formArrayName="items">
     <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
       <h3>{{ item.get('title')?.value }}</h3>
-      <div formArrayName="subItems">
-        <div *ngFor="let subItem of getSubItems(item).controls; let j = index">
-          <input type="text" [formControlName]="j" />
+      <div formArrayName="subItems" class="sub-items">
+        <div *ngFor="let subItem of getSubItems(item).controls; let j = index" [formGroupName]="j" class="sub-item">
+          <span>{{ subItem.get('subTitle')?.value }}</span>
+          <span>{{ subItem.get('unitPrice')?.value }}円</span>
+          <div class="quantity-wrapper">
+            <span class="label">一式</span>
+            <input type="number" formControlName="quantity" (input)="calculateTotalAmount(subItem)" />
+            <span class="unit">式</span>
+          </div>
+          <span>{{ subItem.get('totalAmount')?.value }}円</span>
         </div>
       </div>
     </div>
+  </div>
+  <div class="grand-total">
+    合計金額: {{ calculateGrandTotal() }}円
   </div>
 </form>
