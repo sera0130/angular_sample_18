@@ -5,7 +5,7 @@ import { CustomValidator } from '../../../common/validators/custom.validator';
 import { HttpService } from '../../../common/services/http.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../common/services/auth.service';
-import { AuthResponse } from '../../../common/interfaces/interface';
+import { OneTimeAuthResponse } from '../../../common/interfaces/interface';
 
 @Component({
   selector: 'app-page1',
@@ -49,7 +49,7 @@ export class Page1Component implements OnInit {
 
     // 認証APIコール
     if (this.form.valid) {
-      this.httpService.post<AuthResponse>('your-endpoint', this.form.value).subscribe(response => {
+      this.httpService.post<OneTimeAuthResponse>('your-endpoint', this.form.value).subscribe(response => {
         console.log('API call successful', response);
       
         // 認証トークンをセット
