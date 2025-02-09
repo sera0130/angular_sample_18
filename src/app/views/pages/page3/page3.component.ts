@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../../../environments/environment';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CustomValidator } from '../../../common/validators/custom.validator';
-import { HttpService } from '../../../common/services/http.service';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../common/services/auth.service';
-import { OneTimeAuthResponse } from '../../../common/interfaces/interface';
+import { HttpClient } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-page3',
@@ -16,67 +14,55 @@ import { OneTimeAuthResponse } from '../../../common/interfaces/interface';
 })
 export class page3Component implements OnInit {
   form: FormGroup;
-  requiredError = false;
-  numericError = false;
-  onInitResponseError = false;
-  submitResponseError = false;
 
-  constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private cookieService: CookieService) {
     this.form = this.fb.group({
-      inputOneTime: ['', [Validators.required, CustomValidator.numeric()]]
+      items: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
-    // APIコール
-    this.httpService.post('your-endpoint', this.form.value).subscribe(response => {
-      console.log('API call successful', response);
-    }, error => {
-      this.onInitResponseError = true;
-      console.error('API call failed', error);
+    const apiResponse: Item[] = [
+      { title: '見出し1', subItems: [{ subTitle: '小見出し1-1' }, { subTitle: '小見出し1-2' }] },
+      { title: '見出し2', subItems: [{ subTitle: '小見出し2-1' }, { subTitle: '小見出し2-2' }, { subTitle: '小見出し2-3' }] }
+    ];
+    this.populateForm(apiResponse);
+    // this.fetchData().subscribe(data => this.populateForm(data));
+  }
+
+  get items() {
+    return this.form.get('items') as FormArray;
+  }
+
+  getSubItems(item: AbstractControl) {
+    return item.get('subItems') as FormArray;
+  }
+
+  fetchData(): Observable<Item[]> {
+    const token = this.cookieService.get('authToken');
+    const body = { authToken: token }; // リクエストボディに認証トークンを含めます
+
+    // HTTP POSTリクエストでデータを取得する例。URLは仮定しています。
+    return this.http.post<Item[]>('testUrl', body);
+  }
+
+  populateForm(apiResponse: Item[]) {
+    apiResponse.forEach(item => {
+      const subItemsArray = this.fb.array(item.subItems.map(subItem => this.fb.control(subItem.subTitle)));
+      const itemGroup = this.fb.group({
+        title: item.title,
+        subItems: subItemsArray
+      });
+      this.items.push(itemGroup);
     });
   }
+}
 
-  /**
-   * フォームの送信処理（認証）
-   */
-  onSubmit(): void {
-    // 初期化
-    this.submitResponseError = false;
+interface SubItem {
+  subTitle: string;
+}
 
-    // 入力値チェック
-    this.validateForm();
-
-    // 認証APIコール
-    if (this.form.valid) {
-      this.httpService.post<OneTimeAuthResponse>('your-endpoint', this.form.value).subscribe(response => {
-        console.log('API call successful', response);
-      
-        // 認証トークンをセット
-        const token = 'your-auth-token';
-        this.authService.setAuthToken(token);
-        console.log('Token set:', this.authService.getAuthToken());
-      }, error => {
-        this.submitResponseError = true;
-        console.error('API call failed', error);
-      });
-    } else {
-      console.log('Form is invalid');
-    }
-  }
-
-  /**
-   * フォームのバリデーション処理
-   */
-  validateForm(): void {
-    this.requiredError = this.form.get('inputOneTime')?.errors?.['required'] || false;
-    this.numericError = this.form.get('inputOneTime')?.errors?.['numeric'] || false;
-  }
-
-  /**
-   * フォームのバリデーション結果取得
-   */
-  get isFormValid(): boolean {
-    return this.form.valid;
-  }
+interface Item {
+  title: string;
+  subItems: SubItem[];
 }

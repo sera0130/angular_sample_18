@@ -1,16 +1,12 @@
-<div>
-    <h3>page3 activated</h3>
-    <p *ngIf="onInitResponseError">oninit response error.</p>
-</div>
 <form [formGroup]="form">
-    <div>
-        <label for="inputOneTime">Input A:</label>
-        <input id="inputOneTime" formControlName="inputOneTime" />
-        <div>
-            <p *ngIf="requiredError">This field is required.</p>
-            <p *ngIf="numericError">Only numeric values are allowed.</p>
-            <p *ngIf="submitResponseError">auth response error.</p>
+  <div formArrayName="items">
+    <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+      <h3>{{ item.get('title')?.value }}</h3>
+      <div formArrayName="subItems">
+        <div *ngFor="let subItem of getSubItems(item).controls; let j = index">
+          <input type="text" [formControlName]="j" />
         </div>
+      </div>
     </div>
-    <button type="button" (click)="onSubmit()">Submit</button>
+  </div>
 </form>
