@@ -1,49 +1,45 @@
-import { Injectable, ComponentFactoryResolver, ApplicationRef, Injector } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, ApplicationRef, Injector, ComponentRef, Type, ViewContainerRef } from '@angular/core';
 import { DialogComponent } from '../../views/common/dialog/dialog/dialog.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DialogService {
-  private dialogSubject = new BehaviorSubject<{ message: string, showCancel: boolean, resolve: (result: boolean) => void } | null>(null);
+  private dialogRef: ComponentRef<any> | null = null;
+  private dialogContainer: ViewContainerRef | null = null;
 
   constructor(
-    private resolver: ComponentFactoryResolver,
     private appRef: ApplicationRef,
     private injector: Injector
   ) {}
 
+  setDialogContainer(container: ViewContainerRef) {
+    this.dialogContainer = container;
+  }
+
   openDialog(message: string, showCancel: boolean): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      this.dialogSubject.next({ message, showCancel, resolve });
+      if (!this.dialogContainer) {
+        throw new Error('Dialog container is not set.');
+      }
 
       // Create component dynamically
-      const componentFactory = this.resolver.resolveComponentFactory(DialogComponent);
-      const componentRef = componentFactory.create(this.injector);
+      const componentRef = this.dialogContainer.createComponent(DialogComponent);
       componentRef.instance.message = message;
       componentRef.instance.showCancel = showCancel;
       componentRef.instance.dialogClose.subscribe((result: boolean) => {
         resolve(result);
-        this.appRef.detachView(componentRef.hostView);
-        componentRef.destroy();
+        this.closeDialog();
       });
 
-      this.appRef.attachView(componentRef.hostView);
-      const domElem = (componentRef.hostView as any).rootNodes[0] as HTMLElement;
-      document.body.appendChild(domElem);
+      this.dialogRef = componentRef;
     });
   }
 
-  closeDialog(result: boolean): void {
-    const dialogState = this.dialogSubject.getValue();
-    if (dialogState) {
-      dialogState.resolve(result);
-      this.dialogSubject.next(null);
+  closeDialog(): void {
+    if (this.dialogRef) {
+      this.dialogRef.destroy();
+      this.dialogRef = null;
     }
-  }
-
-  get dialogState() {
-    return this.dialogSubject.asObservable();
   }
 }
