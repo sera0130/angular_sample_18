@@ -12,7 +12,6 @@ import { DialogService } from '../../../common/services/dialog.service';
 export class Page4Component implements OnInit {
   videoSource1 = '/assets/videos/video1.mp4';
   videoSource2 = '/assets/videos/video2.mp4';
-  @ViewChild('dialogContainer', { read: ViewContainerRef }) dialogContainer!: ViewContainerRef;
 
   constructor(private dialogService: DialogService) {}
 
@@ -29,10 +28,6 @@ export class Page4Component implements OnInit {
   ];
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
-    this.dialogService.setDialogContainer(this.dialogContainer);
   }
 
   async openDialogExample() {
