@@ -6,7 +6,8 @@ import { HeaderComponent } from '../../common/header/header/header.component';
   selector: 'app-layout',
   imports: [RouterOutlet, HeaderComponent],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.scss'
+  styleUrl: './layout.component.scss',
+  standalone: true
 })
 export class LayoutComponent {
 

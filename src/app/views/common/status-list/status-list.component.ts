@@ -11,7 +11,8 @@ interface Status {
   selector: 'app-status-list',
   imports: [CommonModule],
   templateUrl: './status-list.component.html',
-  styleUrl: './status-list.component.scss'
+  styleUrl: './status-list.component.scss',
+  standalone: true
 })
 export class StatusListComponent {
   @Input() statuses: Status[] = [];

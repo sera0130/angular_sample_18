@@ -12,7 +12,8 @@ interface Status {
   selector: 'app-video',
   imports: [CommonModule, StatusListComponent],
   templateUrl: './video.component.html',
-  styleUrl: './video.component.scss'
+  styleUrl: './video.component.scss',
+  standalone: true
 })
 export class VideoComponent implements AfterViewInit {
   @Input() videoSource: string = '';

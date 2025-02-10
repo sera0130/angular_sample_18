@@ -26,9 +26,11 @@ ng generate component views/common/statusList;
 ng generate component views/layout/layout;
 ng generate component views/common/header/header;
 ng generate component views/common/footer/footer;
+ng generate component views/common/dialog/dialog;
 
 ng generate service common/services/http;
 ng generate service common/services/auth;
+ng generate service common/services/Dialog;
 
 ng generate enum common/defines/enum/enum;
 ng generate enum common/defines/messages/message1;
