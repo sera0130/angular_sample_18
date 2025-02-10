@@ -1,0 +1,23 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f0f0f0;
+}
+
+.video-section {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .video-section {
+    flex-direction: column;
+    align-items: center;
+  }
+}

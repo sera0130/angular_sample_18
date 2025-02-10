@@ -19,6 +19,10 @@ ng new angular_sample_18
 
 ng generate component views/pages/page1;
 ng generate component views/pages/page2;
+ng generate component views/pages/page3;
+ng generate component views/pages/page4;
+ng generate component views/pages/video;
+ng generate component views/common/statusList;
 ng generate component views/layout/layout;
 ng generate component views/common/header/header;
 ng generate component views/common/footer/footer;

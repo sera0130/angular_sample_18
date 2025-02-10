@@ -1,0 +1,7 @@
+<div class="status-list">
+    <div *ngFor="let status of statuses" class="status-item">
+        <h4>{{ status.title }}</h4>
+        <img [src]="status.icon" alt="status icon" />
+        <p>{{ status.status }}</p>
+    </div>
+</div>

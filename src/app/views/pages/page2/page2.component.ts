@@ -51,7 +51,7 @@ export class page2Component implements OnInit {
     if (this.form.valid) {
       this.httpService.post<OneTimeAuthResponse>('your-endpoint', this.form.value).subscribe(response => {
         console.log('API call successful', response);
-      
+
         // 認証トークンをセット
         const token = 'your-auth-token';
         this.authService.setAuthToken(token);

@@ -22,7 +22,7 @@ export class Page1Component implements OnInit {
   onInitResponseError = false;
   submitResponseError = false;
 
-  constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService,private router: Router) {
+  constructor(private fb: FormBuilder, private httpService: HttpService, private authService: AuthService, private router: Router) {
     this.form = this.fb.group({
       inputOneTime: ['', [Validators.required, CustomValidator.numeric()]]
     });
@@ -52,7 +52,7 @@ export class Page1Component implements OnInit {
     if (this.form.valid) {
       this.httpService.post<OneTimeAuthResponse>('your-endpoint', this.form.value).subscribe(response => {
         console.log('API call successful', response);
-      
+
         // 認証トークンをセット
         const token = 'your-auth-token';
         this.authService.setAuthToken(token);

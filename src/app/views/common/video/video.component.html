@@ -1,0 +1,14 @@
+<div class="video-container">
+    <video #videoRef controls>
+        <source [src]="videoSource" type="video/mp4" />
+        Your browser does not support the video tag.
+    </video>
+    <div class="controls">
+        <button (click)="onRewind()">5秒戻る</button>
+        <button (click)="onPlay()">再生</button>
+        <button (click)="onPause()">一時停止</button>
+        <button (click)="onStop()">停止</button>
+        <button (click)="onForward()">5秒進む</button>
+    </div>
+    <app-status-list [statuses]="statuses"></app-status-list>
+</div>
