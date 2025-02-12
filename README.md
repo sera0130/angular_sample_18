@@ -21,6 +21,7 @@ ng generate component views/pages/page1;
 ng generate component views/pages/page2;
 ng generate component views/pages/page3;
 ng generate component views/pages/page4;
+ng generate component views/pages/page5;
 ng generate component views/pages/video;
 ng generate component views/common/statusList;
 ng generate component views/layout/layout;
